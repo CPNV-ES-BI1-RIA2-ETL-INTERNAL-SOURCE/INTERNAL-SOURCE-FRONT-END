@@ -20,7 +20,7 @@ RiaFrontend provides a user-friendly interface to access and display AWS QuickSi
 - Npm - 11.1.0 - https://www.npmjs.com/package/npm
 - IDE - Visual Studio Code - 1.97 - https://code.visualstudio.com/
 - Angular - 19.2.0 - https://angular.dev/installation
-- Cypress - 14.0.0 - https://docs.cypress.io/guides/getting-started/installing-cypress
+- Playwright - 1.50 - https://playwright.dev/ 
 - PlantUML - Latest from plugin manager
 
 
@@ -59,6 +59,8 @@ ng build
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
 ## Running end-to-end tests - https://angular.dev/tools/cli/end-to-end
+
+Playwright was chosen as the end-to-end testing framework especially for its ability to emulate mobile devices.
 
 For end-to-end (e2e) testing, run:
 
