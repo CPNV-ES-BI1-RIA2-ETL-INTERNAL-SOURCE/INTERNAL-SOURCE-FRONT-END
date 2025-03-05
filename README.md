@@ -17,12 +17,48 @@ RiaFrontend provides a user-friendly interface to access and display AWS QuickSi
 ## Technical Stack
 
 - Node.js - v22.11.0 - https://nodejs.org/en/download/
+- TypeScript - 5.6.3 - https://www.typescriptlang.org/
 - Npm - 11.1.0 - https://www.npmjs.com/package/npm
-- IDE - Visual Studio Code - 1.97 - https://code.visualstudio.com/
-- Angular - 19.2.0 - https://angular.dev/installation
-- Playwright - 1.50 - https://playwright.dev/ 
+- IDE - WebStorm - latest
 - PlantUML - Latest from plugin manager
 
+### IDE configuration
+
+- WebStorm
+  - Editor > Code Style > TypeScript - Use default settings
+  - Languages & Frameworks > TypeScript > TSLint - Automatic TSLint Configuration
+  - Plugins > PlantUML - Use default settings
+
+## Project Structure
+
+```text
+RiaFrontend/
+├── 📁 e2e/
+│   └── 📁 behavior-to-test/
+│       └── 📄 behavior1.spec.ts    # Test the behavior of sequence.
+│
+├── 📁 src/
+│   ├── 📁 app/
+│   │   ├── 📁 components/
+│   │   │   ├── 📁 app/            # Main application component
+│   │   │   │   ├── 📄 app.component.ts      # Component logic
+│   │   │   │   ├── 📄 app.component.html    # Root template
+│   │   │   │   ├── 📄 app.component.css     # Component styles
+│   │   │   │   └── 📄 app.component.spec.ts # Test the behavior of the component
+│   │   │   │
+│   │   │   └── 📁 component-name/
+│   │   │       ├── 📄 component-name.component.css
+│   │   │       ├── 📄 component-name.component.html
+│   │   │       ├── 📄 component-name.component.spec.ts
+│   │   │       └── 📄 component-name.component.ts
+│   │   │
+│   │   ├── 📁 services/
+│   │   ├── 📁 interfaces/
+│   │   ├── 📁 pages/
+│   │   ├── 📄 app.module.ts          # Angular root module
+│   │   └── 📄 app.routes.ts          # Routing configuration
+
+```
 
 ## Development server
 
@@ -68,6 +104,20 @@ For end-to-end (e2e) testing, run:
 ng e2e
 ```
 
+## Running unit tests - https://angular.dev/tools/cli/test
+
+For unit tests, run:
+
+```bash
+ng test
+```
+
+For CI headless tests, run:
+
+```bash
+ng test --no-watch --no-progress --browsers=ChromeHeadless
+```
+
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
@@ -88,6 +138,7 @@ We use the Gitflow workflow for managing our branches:
 - `bugfix/*`: Bug fixes for development
 
 Branch naming convention:
+
 - Features: `feature/descriptive-name`
 - Bugfixes: `bugfix/issue-description`
 - Hotfixes: `hotfix/critical-issue`
@@ -106,7 +157,7 @@ Branch naming convention:
 We strictly follow the Conventional Commits specification. Each commit message must be structured as follows:
 
 ```
-<type>[optional scope]: <description>
+<type>: <description>
 
 [optional body]
 
@@ -114,6 +165,7 @@ We strictly follow the Conventional Commits specification. Each commit message m
 ```
 
 Types:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -123,18 +175,11 @@ Types:
 - `chore`: Maintenance tasks
 
 Examples:
+
 ```
-feat(auth): add login functionality
-fix(api): correct timeout handling
+feat: add login functionality
+fix: correct timeout handling
 docs: update API documentation
-```
-
-Breaking changes must be indicated by a `!` after the type/scope or by adding `BREAKING CHANGE:` in the footer.
-
-Example:
-```
-feat(auth): add login functionality
-BREAKING CHANGE: The `login` method now requires a `username` and `password` parameter.
 ```
 
 For more details on Conventional Commits, visit [conventionalcommits.org](https://www.conventionalcommits.org/).
