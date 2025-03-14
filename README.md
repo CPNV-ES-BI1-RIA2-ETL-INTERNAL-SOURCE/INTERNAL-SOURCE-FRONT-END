@@ -51,10 +51,13 @@ RiaFrontend/
 │   │   │       ├── 📄 component-name.component.html
 │   │   │       ├── 📄 component-name.component.spec.ts
 │   │   │       └── 📄 component-name.component.ts
-│   │   │
+│   │   ├── 📁 exceptions/              # Application exceptions and error handling
 │   │   ├── 📁 services/
 │   │   ├── 📁 interfaces/
+│   │   ├── 📁 models/
+│   │   ├── 📁 mocks/                 # Mock data for testing
 │   │   ├── 📁 pages/
+│   │   ├── 📁 enviroments/           # Environment variables for development, test and production
 │   │   ├── 📄 app.module.ts          # Angular root module
 │   │   └── 📄 app.routes.ts          # Routing configuration
 
@@ -117,6 +120,73 @@ For CI headless tests, run:
 ```bash
 ng test --no-watch --no-progress --browsers=ChromeHeadless
 ```
+
+## Authentication with Keycloak
+
+This application uses Keycloak for authentication. Follow these steps to set up Keycloak using Docker for local development and testing.
+
+### Prerequisites
+
+- Docker engine installed
+
+### Start Keycloak
+
+Run the following command to start Keycloak with Docker:
+
+```bash
+docker run -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.1.3 start-dev
+```
+
+This command:
+
+- Exposes Keycloak on port 8080
+- Creates an initial admin user with username `admin` and password `admin`
+
+### Configure Keycloak
+
+After starting Keycloak, follow these steps to configure it for use with the application:
+
+1. **Access the Admin Console**
+
+   - Open http://localhost:8080 in your browser
+   - Log in with username `admin` and password `admin`
+
+2. **Create a New Realm**
+
+   - Click on the dropdown in the top-left corner (shows "master" by default)
+   - Click "Create Realm"
+   - Enter a name for your realm (e.g., "ria-realm")
+   - Click "Create"
+
+3. **Create a Client**
+
+   - In your new realm, go to "Clients" in the left sidebar
+   - Click "Create client"
+   - Set "Client type" to "OpenID Connect"
+   - Set "Client ID" to `angular-client`
+   - Click "Next"
+   - Ensure "Standard flow" is enabled
+   - Click "Next"
+   - Under "Login settings":
+     - Set "Valid redirect URIs" to `http://localhost:4200/*`
+     - Set "Web origins" to `http://localhost:4200`
+   - Click "Save"
+
+4. **Create a User**
+   - Go to "Users" in the left sidebar
+   - Click "Add user"
+   - Fill in the following fields:
+     - Username: choose a username
+     - Email: enter a valid email
+     - First Name and Last Name (optional)
+   - Click "Create"
+   - Go to the "Credentials" tab
+   - Set a password and toggle "Temporary" to "Off"
+   - Click "Set Password"
+
+### Integrating with the Frontend
+
+Once Keycloak is set up, you can configure your Angular application to use it for authentication. The application is already configured to use Keycloak, but you may need to adjust settings in the environment files to match your Keycloak setup.
 
 ## Additional Resources
 
