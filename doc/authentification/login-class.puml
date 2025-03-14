@@ -17,87 +17,67 @@ skinparam interface {
   BorderColor DarkSlateGray
 }
 
-' External library
 package "keycloak-js" #LightBlue {}
 
-' Our authentication system
 package "Authentication System" {
 
 interface AuthProvider {
-  + login(): Promise<void>
-  + logout(): Promise<void>
-  + getUser(): Promise<User | null>
-  + isAuthenticated(): Promise<boolean>
+  + login(): void
+  + logout(): void
+  + getUser(): User
+  + isAuthenticated(): void
 }
 
 class User {
   + id: string
   + email: string
   + username: string
-  + constructor(id: string, email: string, username: string)
 }
 
 class KeycloakProvider {
   - keycloak: Keycloak
-  - currentUser: BehaviorSubject<User | null>
+  - currentUser: User
   - initialized: boolean
-  + constructor()
-  + login(): Promise<void>
-  + logout(): Promise<void>
-  + getUser(): Promise<User | null>
-  + isAuthenticated(): Promise<boolean>
-  - initialize(): Promise<void>
+  + login(): void
+  + logout(): void
+  + getUser(): User
+  + isAuthenticated(): boolean
+  - initialize(): void
   - setupAuthEventHandlers(): void
-  - refreshUserProfile(): Promise<void>
+  - refreshUserProfile(): void
   - createUserFromProfile(profile: KeycloakProfile): User
 }
 
 class AuthService {
-  - providers: { [key: string]: new () => AuthProvider }
+  - providers: string[]
   + provider: AuthProvider
-  + constructor()
+  + AuthService(provider: AuthProvider)
   + getProvider(): AuthProvider
+  + login(): void
+  + logout(): void
+  + getUser(): User
+  + isAuthenticated(): boolean
   - isProviderValid(providerName: string): boolean
-  + login(): Promise<void>
-  + logout(): Promise<void>
-  + getUser(): Promise<User | null>
-  + isAuthenticated(): Promise<boolean>
 }
 
-' Exception hierarchy
 package "Exceptions" #LightPink {  
-  class AuthException extends Error {
-    + name: string = 'AuthException'
-    + constructor(message: string)
+  Exception AuthException {
+    + name: string
+    + AuthException(message: string)
   }
   
-  class AuthInitializationException {
-    + name: string
-    + constructor(message: string)
+  Exception AuthInitializationException {
   }
   
-  class LoginException {
-    + name: string
-    + constructor(message: string)
-  }
+  Exception LoginException {}
   
-  class LogoutException {
-    + name: string
-    + constructor(message: string)
-  }
+  Exception LogoutException {}
   
-  class ProfileException {
-    + name: string
-    + constructor(message: string)
-  }
+  Exception ProfileException {}
   
-  class InvalidProviderException {
-    + name: string
-    + constructor(providerName: string)
-  }
+  Exception InvalidProviderException {}
 }
 
-' Relationships with cardinality
 AuthService *-down- AuthProvider
 KeycloakProvider .up.|> AuthProvider
 AuthProvider .right.> User
@@ -114,6 +94,8 @@ LogoutException -left-|> AuthException
 ProfileException -down-|> AuthException
 InvalidProviderException -right-|> AuthException
 AuthInitializationException -down-|> AuthException
+AuthService .down.> User
+KeycloakProvider .up.> User
 
 @enduml
 
