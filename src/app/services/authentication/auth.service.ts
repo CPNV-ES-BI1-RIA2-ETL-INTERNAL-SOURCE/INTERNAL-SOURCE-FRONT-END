@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthProvider } from '../../interfaces/auth-provider.interface';
+import { KeycloakProvider } from './providers/keycloak-provider.service';
 import { InvalidProviderException } from '../../exceptions/authentication/auth-exceptions';
 import { User } from '../../models/user.model';
 import { environment } from '../../../environments/environment';

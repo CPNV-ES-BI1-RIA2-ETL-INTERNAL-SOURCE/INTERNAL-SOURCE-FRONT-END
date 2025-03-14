@@ -10,6 +10,50 @@ export class AuthException extends Error {
 }
 
 /**
+ * Thrown when authentication initialization fails
+ */
+export class AuthInitializationException extends AuthException {
+  constructor(message: string) {
+    super(message);
+    this.name = 'AuthInitializationException';
+    Object.setPrototypeOf(this, AuthInitializationException.prototype);
+  }
+}
+
+/**
+ * Thrown when a login attempt fails
+ */
+export class LoginException extends AuthException {
+  constructor(message: string) {
+    super(message);
+    this.name = 'LoginException';
+    Object.setPrototypeOf(this, LoginException.prototype);
+  }
+}
+
+/**
+ * Thrown when a logout attempt fails
+ */
+export class LogoutException extends AuthException {
+  constructor(message: string) {
+    super(message);
+    this.name = 'LogoutException';
+    Object.setPrototypeOf(this, LogoutException.prototype);
+  }
+}
+
+/**
+ * Thrown when profile information is unavailable or invalid
+ */
+export class ProfileException extends AuthException {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ProfileException';
+    Object.setPrototypeOf(this, ProfileException.prototype);
+  }
+}
+
+/**
  * Thrown when trying to use an invalid or unsupported authentication provider
  */
 export class InvalidProviderException extends AuthException {
