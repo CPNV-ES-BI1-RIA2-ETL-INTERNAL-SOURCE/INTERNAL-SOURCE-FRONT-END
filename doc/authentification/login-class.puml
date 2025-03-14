@@ -1,0 +1,119 @@
+@startuml login-class
+
+' Color scheme
+skinparam classAttributeIconSize 0
+skinparam backgroundColor white
+skinparam package {
+  BackgroundColor LightCyan
+  BorderColor DarkSlateGray
+}
+skinparam class {
+  BackgroundColor Wheat
+  BorderColor DarkSlateGray
+  ArrowColor DarkSlateGray
+}
+skinparam interface {
+  BackgroundColor PaleTurquoise
+  BorderColor DarkSlateGray
+}
+
+' External library
+package "keycloak-js" #LightBlue {}
+
+' Our authentication system
+package "Authentication System" {
+
+interface AuthProvider {
+  + login(): Promise<void>
+  + logout(): Promise<void>
+  + getUser(): Promise<User | null>
+  + isAuthenticated(): Promise<boolean>
+}
+
+class User {
+  + id: string
+  + email: string
+  + username: string
+  + constructor(id: string, email: string, username: string)
+}
+
+class KeycloakProvider {
+  - keycloak: Keycloak
+  - currentUser: BehaviorSubject<User | null>
+  - initialized: boolean
+  + constructor()
+  + login(): Promise<void>
+  + logout(): Promise<void>
+  + getUser(): Promise<User | null>
+  + isAuthenticated(): Promise<boolean>
+  - initialize(): Promise<void>
+  - setupAuthEventHandlers(): void
+  - refreshUserProfile(): Promise<void>
+  - createUserFromProfile(profile: KeycloakProfile): User
+}
+
+class AuthService {
+  - providers: { [key: string]: new () => AuthProvider }
+  + provider: AuthProvider
+  + constructor()
+  + getProvider(): AuthProvider
+  - isProviderValid(providerName: string): boolean
+  + login(): Promise<void>
+  + logout(): Promise<void>
+  + getUser(): Promise<User | null>
+  + isAuthenticated(): Promise<boolean>
+}
+
+' Exception hierarchy
+package "Exceptions" #LightPink {  
+  class AuthException extends Error {
+    + name: string = 'AuthException'
+    + constructor(message: string)
+  }
+  
+  class AuthInitializationException {
+    + name: string
+    + constructor(message: string)
+  }
+  
+  class LoginException {
+    + name: string
+    + constructor(message: string)
+  }
+  
+  class LogoutException {
+    + name: string
+    + constructor(message: string)
+  }
+  
+  class ProfileException {
+    + name: string
+    + constructor(message: string)
+  }
+  
+  class InvalidProviderException {
+    + name: string
+    + constructor(providerName: string)
+  }
+}
+
+' Relationships with cardinality
+AuthService *-down- AuthProvider
+KeycloakProvider .up.|> AuthProvider
+AuthProvider .right.> User
+KeycloakProvider -left-> "keycloak-js"
+
+note bottom of "Exceptions"
+  This package contains all the exceptions 
+  that can be thrown by the authentication system.
+  Used by AuthService and KeycloakProvider.
+end note
+
+LoginException -up-|> AuthException
+LogoutException -left-|> AuthException
+ProfileException -down-|> AuthException
+InvalidProviderException -right-|> AuthException
+AuthInitializationException -down-|> AuthException
+
+@enduml
+
