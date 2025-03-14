@@ -1,0 +1,82 @@
+@startuml auth-initialization-sequence
+
+' Color scheme
+skinparam sequenceArrowColor DarkSlateGray
+skinparam sequenceGroupBackgroundColor LightCyan
+skinparam sequenceLifeLineBorderColor DarkSlateGray
+skinparam sequenceParticipantBackgroundColor Wheat
+skinparam sequenceParticipantBorderColor DarkSlateGray
+
+participant "Application" as App
+participant "AuthService" as Auth
+participant "KeycloakProvider" as Provider
+participant "Keycloak.js" as Keycloak
+database "Keycloak Server" as Server
+participant "environment" as Env
+
+== AuthService Initialization ==
+
+App -> Auth: Inject the AuthService
+activate Auth
+
+Auth -> Env: retrieve the provider name
+activate Env
+Env --> Auth: provider: string
+deactivate Env
+
+Auth -> Auth: validate the provider
+activate Auth
+note right: Validates provider exists in\nregistered providers map
+deactivate Auth
+
+alt Provider is valid
+    Auth -> Provider: Inject the provider
+    activate Provider
+    
+    Provider -> Keycloak: Inject the Keycloak instance
+    activate Keycloak
+    Keycloak --> Provider: instance: Keycloak
+    deactivate Keycloak
+    
+    Provider -> Provider: initialize
+    activate Provider
+    
+    Provider -> Provider: setupEventHandlers
+    note right: Configures onAuthSuccess,\nonAuthError handlers
+    
+    Provider -> Provider: refreshProfile
+    
+    alt User authenticated
+        Provider -> Keycloak: check if user is authenticated
+        activate Keycloak
+        Keycloak --> Provider: true
+        deactivate Keycloak
+        
+        Provider -> Keycloak: load the user profile
+        activate Keycloak
+        Keycloak -> Server: get the user profile info
+        Server --> Keycloak: profile: KeycloakProfile
+        Keycloak --> Provider: profile: KeycloakProfile
+        deactivate Keycloak
+        
+        Provider -> Provider: create the user: User
+        Provider -> Provider: update the current internal user
+    else Not authenticated
+        Provider -> Provider: clear the current internal user
+    end
+    
+    Provider --> Provider: set the initialized flag
+    deactivate Provider
+    
+    Provider --> Auth: Provider instance: KeycloakProvider
+    deactivate Provider
+    
+    Auth -> Auth: set the provider
+else Provider is invalid
+    Auth -> Auth: throw InvalidProviderException
+end
+
+Auth --> App: instance: AuthService
+deactivate Auth
+
+@enduml 

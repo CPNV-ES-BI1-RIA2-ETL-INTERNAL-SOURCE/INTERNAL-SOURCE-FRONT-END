@@ -51,10 +51,13 @@ RiaFrontend/
 │   │   │       ├── 📄 component-name.component.html
 │   │   │       ├── 📄 component-name.component.spec.ts
 │   │   │       └── 📄 component-name.component.ts
-│   │   │
+│   │   ├── 📁 exceptions/              # Application exceptions and error handling
 │   │   ├── 📁 services/
 │   │   ├── 📁 interfaces/
+│   │   ├── 📁 models/
+│   │   ├── 📁 mocks/                 # Mock data for testing
 │   │   ├── 📁 pages/
+│   │   ├── 📁 enviroments/           # Environment variables for development, test and production
 │   │   ├── 📄 app.module.ts          # Angular root module
 │   │   └── 📄 app.routes.ts          # Routing configuration
 
@@ -117,6 +120,31 @@ For CI headless tests, run:
 ```bash
 ng test --no-watch --no-progress --browsers=ChromeHeadless
 ```
+
+## Authentication with Keycloak
+
+This application uses Keycloak for authentication. Follow these steps to set up Keycloak using Docker for local development and testing.
+
+### Prerequisites
+
+- Docker engine installed
+
+### Start Keycloak
+
+Run the following command to start Keycloak with Docker:
+
+```bash
+docker run -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.1.3 start-dev
+```
+
+This command:
+
+- Exposes Keycloak on port 8080
+- Creates an initial admin user with username `admin` and password `admin`
+
+### Configure Keycloak
+
+- [Wiki](https://github.com/CPNV-ES-BI1-RIA2-ETL-INTERNAL-SOURCE/INTERNAL-SOURCE-FRONT-END/wiki/Authentication-service)
 
 ## Additional Resources
 

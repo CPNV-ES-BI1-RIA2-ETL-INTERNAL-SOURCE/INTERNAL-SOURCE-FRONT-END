@@ -1,0 +1,101 @@
+@startuml login-class
+
+' Color scheme
+skinparam classAttributeIconSize 0
+skinparam backgroundColor white
+skinparam package {
+  BackgroundColor LightCyan
+  BorderColor DarkSlateGray
+}
+skinparam class {
+  BackgroundColor Wheat
+  BorderColor DarkSlateGray
+  ArrowColor DarkSlateGray
+}
+skinparam interface {
+  BackgroundColor PaleTurquoise
+  BorderColor DarkSlateGray
+}
+
+package "keycloak-js" #LightBlue {}
+
+package "Authentication System" {
+
+interface AuthProvider {
+  + login(): void
+  + logout(): void
+  + getUser(): User
+  + isAuthenticated(): void
+}
+
+class User {
+  + id: string
+  + email: string
+  + username: string
+}
+
+class KeycloakProvider {
+  - keycloak: Keycloak
+  - currentUser: User
+  - initialized: boolean
+  + login(): void
+  + logout(): void
+  + getUser(): User
+  + isAuthenticated(): boolean
+  - initialize(): void
+  - setupAuthEventHandlers(): void
+  - refreshUserProfile(): void
+  - createUserFromProfile(profile: KeycloakProfile): User
+}
+
+class AuthService {
+  - providers: string[]
+  + provider: AuthProvider
+  + AuthService(provider: AuthProvider)
+  + getProvider(): AuthProvider
+  + login(): void
+  + logout(): void
+  + getUser(): User
+  + isAuthenticated(): boolean
+  - isProviderValid(providerName: string): boolean
+}
+
+package "Exceptions" #LightPink {  
+  Exception AuthException {
+    + name: string
+    + AuthException(message: string)
+  }
+  
+  Exception AuthInitializationException {
+  }
+  
+  Exception LoginException {}
+  
+  Exception LogoutException {}
+  
+  Exception ProfileException {}
+  
+  Exception InvalidProviderException {}
+}
+
+AuthService *-down- AuthProvider
+KeycloakProvider .up.|> AuthProvider
+AuthProvider .right.> User
+KeycloakProvider -left-> "keycloak-js"
+
+note bottom of "Exceptions"
+  This package contains all the exceptions 
+  that can be thrown by the authentication system.
+  Used by AuthService and KeycloakProvider.
+end note
+
+LoginException -up-|> AuthException
+LogoutException -left-|> AuthException
+ProfileException -down-|> AuthException
+InvalidProviderException -right-|> AuthException
+AuthInitializationException -down-|> AuthException
+AuthService .down.> User
+KeycloakProvider .up.> User
+
+@enduml
+
