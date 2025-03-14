@@ -35,15 +35,15 @@ Keycloak -> Provider: onAuthSuccess callback
 deactivate Keycloak
 activate Provider
 
-Provider -> Keycloak: loadUserProfile()
+Provider -> Keycloak: load user profile
 activate Keycloak
 Keycloak -> Server: Request user profile
 Server --> Keycloak: Return profile data
 Keycloak --> Provider: KeycloakProfile
 deactivate Keycloak
 
-Provider -> Provider: createUserFromProfile()
-Provider -> Provider: currentUser.next(user)
+Provider -> Provider: create user from profile
+Provider -> Provider: update internal user store
 Provider --> Auth: Resolve promise
 deactivate Provider
 Auth --> User: Login successful
@@ -55,7 +55,7 @@ User -> Auth: logout()
 activate Auth
 Auth -> Provider: logout()
 activate Provider
-Provider -> Provider: currentUser.next(null)
+Provider -> Provider: clear internal user store
 Provider -> Keycloak: logout({redirectUri})
 activate Keycloak
 Keycloak -> Server: Logout request
