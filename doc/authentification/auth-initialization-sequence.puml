@@ -1,0 +1,80 @@
+@startuml auth-initialization-sequence
+
+' Color scheme
+skinparam sequenceArrowColor DarkSlateGray
+skinparam sequenceGroupBackgroundColor LightCyan
+skinparam sequenceLifeLineBorderColor DarkSlateGray
+skinparam sequenceParticipantBackgroundColor Wheat
+skinparam sequenceParticipantBorderColor DarkSlateGray
+
+participant "Application" as App
+participant "AuthService" as Auth
+participant "KeycloakProvider" as Provider
+participant "Keycloak.js" as Keycloak
+database "Keycloak Server" as Server
+participant "environment" as Env
+
+== AuthService Initialization ==
+
+App -> Auth: Constructor call
+activate Auth
+
+Auth -> Env: Read environment.auth.provider
+activate Env
+Env --> Auth: Return provider name ("keycloak")
+deactivate Env
+
+Auth -> Auth: isProviderValid("keycloak")
+note right: Checks if provider exists in\nregistered providers map
+
+alt Provider is valid
+    Auth -> Provider: new KeycloakProvider()
+    activate Provider
+    
+    Provider -> Keycloak: Inject Keycloak instance
+    activate Keycloak
+    Keycloak --> Provider: Return Keycloak instance
+    deactivate Keycloak
+    
+    Provider -> Provider: initialize()
+    activate Provider
+    
+    Provider -> Provider: setupAuthEventHandlers()
+    note right: Sets up onAuthSuccess,\nonAuthError, etc.
+    
+    Provider -> Provider: refreshUserProfile()
+    
+    alt User already authenticated (token in storage)
+        Provider -> Keycloak: authenticated property check
+        activate Keycloak
+        Keycloak --> Provider: true
+        deactivate Keycloak
+        
+        Provider -> Keycloak: loadUserProfile()
+        activate Keycloak
+        Keycloak -> Server: Request user profile
+        Server --> Keycloak: Return profile data
+        Keycloak --> Provider: KeycloakProfile
+        deactivate Keycloak
+        
+        Provider -> Provider: createUserFromProfile()
+        Provider -> Provider: currentUser.next(user)
+    else Not authenticated
+        Provider -> Provider: currentUser.next(null)
+    end
+    
+    Provider --> Provider: initialized = true
+    deactivate Provider
+    
+    Provider --> Auth: Return KeycloakProvider instance
+    deactivate Provider
+    
+    Auth -> Auth: provider = KeycloakProvider instance
+else Provider is invalid
+    Auth -> Auth: throw new InvalidProviderException
+end
+
+Auth --> App: Return AuthService instance
+deactivate Auth
+
+@enduml 
