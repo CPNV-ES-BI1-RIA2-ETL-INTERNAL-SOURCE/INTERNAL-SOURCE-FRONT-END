@@ -1,0 +1,70 @@
+@startuml login-sequence
+
+' Color scheme
+skinparam sequenceArrowColor DarkSlateGray
+skinparam sequenceGroupBackgroundColor LightCyan
+skinparam sequenceLifeLineBorderColor DarkSlateGray
+skinparam sequenceParticipantBackgroundColor Wheat
+skinparam sequenceParticipantBorderColor DarkSlateGray
+
+actor User
+participant "AuthService" as Auth
+participant "KeycloakProvider" as Provider
+participant "Keycloak.js" as Keycloak
+database "Keycloak Server" as Server
+
+== Login Sequence ==
+
+User -> Auth: login()
+activate Auth
+Auth -> Provider: login()
+activate Provider
+Provider -> Keycloak: login({redirectUri})
+activate Keycloak
+Keycloak -> Server: Redirect to login page
+deactivate Keycloak
+
+note over User, Server
+  User enters credentials on Keycloak login page
+end note
+
+Server --> User: Authentication success & redirect back
+User -> Keycloak: Callback with auth token
+activate Keycloak
+Keycloak -> Provider: onAuthSuccess callback
+deactivate Keycloak
+activate Provider
+
+Provider -> Keycloak: loadUserProfile()
+activate Keycloak
+Keycloak -> Server: Request user profile
+Server --> Keycloak: Return profile data
+Keycloak --> Provider: KeycloakProfile
+deactivate Keycloak
+
+Provider -> Provider: createUserFromProfile()
+Provider -> Provider: currentUser.next(user)
+Provider --> Auth: Resolve promise
+deactivate Provider
+Auth --> User: Login successful
+deactivate Auth
+
+== Logout Sequence ==
+
+User -> Auth: logout()
+activate Auth
+Auth -> Provider: logout()
+activate Provider
+Provider -> Provider: currentUser.next(null)
+Provider -> Keycloak: logout({redirectUri})
+activate Keycloak
+Keycloak -> Server: Logout request
+Server --> Keycloak: Logout successful
+Keycloak --> Provider: Resolve promise
+deactivate Keycloak
+Provider --> Auth: Resolve promise
+deactivate Provider
+Auth --> User: Logout successful
+deactivate Auth
+
+@enduml
