@@ -1,0 +1,17 @@
+<div>
+  <h1>{{ title }}</h1>
+  @if (errorMessage) {
+    <div id="error" class="error-message">{{ errorMessage }}</div>
+  }
+  @if (!isLoggedIn) {
+    <div>
+      <button (click)="login()" id="login-button">Login</button>
+    </div>
+  } @if (isLoggedIn) {
+  <div>
+    <p>Welcome, {{ user?.username }}</p>
+    <button (click)="logout()" id="logout-button">Logout</button>
+  </div>
+}
+  <router-outlet></router-outlet>
+</div>
