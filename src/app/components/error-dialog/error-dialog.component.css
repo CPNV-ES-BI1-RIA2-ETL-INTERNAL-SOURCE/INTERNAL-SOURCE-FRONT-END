@@ -1,0 +1,39 @@
+/* Dialog animation */
+:host {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+dialog {
+  border: none;
+  position: fixed;
+  top: 5rem;
+  z-index: 1000;
+  max-width: 450px;
+  margin: 0 auto;
+  padding: 1rem;
+  animation: slideDown 0.2s ease-in-out;
+}
+
+dialog::backdrop {
+  background: transparent;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 
