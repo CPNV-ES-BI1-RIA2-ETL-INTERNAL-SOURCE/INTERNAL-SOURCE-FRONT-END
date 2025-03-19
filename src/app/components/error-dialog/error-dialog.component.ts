@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,13 +14,17 @@ export class ErrorDialogComponent implements AfterViewInit {
   @ViewChild('errorDialog') dialogRef!: ElementRef<HTMLDialogElement>;
   
   ngAfterViewInit() {
-    if (this.dialogRef.nativeElement) {
-      this.dialogRef.nativeElement.showModal();
-    }
+    setTimeout(() => {
+      if (this.dialogRef?.nativeElement) {
+        if (!this.dialogRef.nativeElement.open) {
+          this.dialogRef.nativeElement.showModal();
+        }
+      }
+    });
   }
 
   onClose() {
-    if (this.dialogRef.nativeElement) {
+    if (this.dialogRef?.nativeElement) {
       this.dialogRef.nativeElement.close();
     }
     this.close.emit();
