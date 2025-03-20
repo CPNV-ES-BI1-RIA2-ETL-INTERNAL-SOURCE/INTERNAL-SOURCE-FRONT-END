@@ -1,4 +1,4 @@
-name: Angular
+name: 'Prevent main from untested code'
 
 on:
   push:
@@ -24,7 +24,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Code image
     - name: Build production Docker image
       run: docker build --target runtime -t internal-source-front-end:latest .
 
