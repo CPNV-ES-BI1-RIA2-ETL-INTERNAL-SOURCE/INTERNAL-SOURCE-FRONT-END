@@ -38,7 +38,6 @@ export class MainLayoutComponent implements OnInit {
       this.isLoggedIn = await this.authService.isAuthenticated();
       if (this.isLoggedIn) this.user = await this.authService.getUser();
     } catch (error) {
-      console.error("That shouldn't have happened.");
       this.handleError(error);
     }
   }
