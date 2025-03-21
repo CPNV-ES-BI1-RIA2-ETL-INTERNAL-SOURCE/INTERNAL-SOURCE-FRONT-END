@@ -15,7 +15,7 @@
         </button>
       } @else {
         <div class="flex items-center gap-4">
-          <span id="welcomeUser" class="text-gray-800 dark:text-white hidden md:block">Welcome, {{ user?.username }}</span>
+          <span id="welcome-user" class="text-gray-800 dark:text-white hidden md:block">Welcome, {{ user?.username }}</span>
           <button
             id="logout-button"
             (click)="logout()"
