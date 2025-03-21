@@ -13,6 +13,10 @@ import {ErrorDialogComponent} from '../../components/error-dialog/error-dialog.c
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
 })
+
+/**
+ * @summary The main layout component
+ */
 export class MainLayoutComponent implements OnInit {
   title = 'ria-frontend';
   isLoggedIn = false;
@@ -22,6 +26,10 @@ export class MainLayoutComponent implements OnInit {
 
   private readonly authService = inject(AuthService);
 
+  /**
+   * @summary ngOnInit  is called once, after the component constructor has been executed.
+   * @returns {Promise<void>}
+   */
   async ngOnInit() {
     try {
       this.isLoggedIn = await this.authService.isAuthenticated();
@@ -31,6 +39,10 @@ export class MainLayoutComponent implements OnInit {
     }
   }
 
+  /**
+   * @summary Logs in the user and sets the authentication state.
+   * @returns {Promise<void>} A promise that resolves when the login process is complete.
+   */
   async login() {
     this.errorMessage = null;
     try {
@@ -42,6 +54,10 @@ export class MainLayoutComponent implements OnInit {
     }
   }
 
+  /**
+   * @summary Logs out the user and unsets the authentication state.
+   * @returns {Promise<void>} A promise that resolves when the logout process is complete.
+   */
   async logout() {
     this.errorMessage = null;
     try {
@@ -63,6 +79,10 @@ export class MainLayoutComponent implements OnInit {
     console.error('Authentication error:', error);
   }
 
+  /**
+   * @summary allow to close the dialog.
+   * @return {void} Does not return anything.
+   */
   closeErrorDialog() {
     this.showErrorDialog = false;
   }
