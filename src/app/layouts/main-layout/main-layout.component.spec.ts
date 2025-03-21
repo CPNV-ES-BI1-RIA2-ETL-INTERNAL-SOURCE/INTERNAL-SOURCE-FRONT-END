@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MainLayoutComponent } from './main-layout.component';
 import { AuthService } from '../../services/authentication/auth.service';
 import { createMockAuthService } from '../../mocks/authentication/auth-mocks';
-import { User } from '../../models/user.model';
 import { createTestUser } from '../../mocks/authentication/auth-mocks';
 import { LoginException, LogoutException } from '../../exceptions/authentication/auth-exceptions';
 import { By } from '@angular/platform-browser';
@@ -59,13 +58,28 @@ describe('MainLayoutComponent', () => {
       fixture.detectChanges();
 
       // Then
-      const usernameMessage = fixture.debugElement.query(By.css('#welcomeUser'));
       const logoutButton = fixture.debugElement.query(By.css('#logout-button'));
       const loginButton = fixture.debugElement.query(By.css('#login-button'));
 
-      expect(usernameMessage.nativeElement.textContent).toContain('Welcome, testuser');
       expect(logoutButton).toBeTruthy();
       expect(loginButton).toBeFalsy();
+    });
+
+    it('should show a welcome message after successful login', async () => {
+      // Given
+      mockAuthService.isAuthenticated.and.resolveTo(false);
+      mockAuthService.getUser.and.resolveTo(null);
+      mockAuthService.login.and.resolveTo();
+      mockAuthService.isAuthenticated.and.resolveTo(true);
+      mockAuthService.getUser.and.resolveTo(testUser);
+
+      // When
+      await component.login();
+      fixture.detectChanges();
+
+      // Then
+      const usernameMessage = fixture.debugElement.query(By.css('#welcome-user'));
+      expect(usernameMessage.nativeElement.textContent).toContain('Welcome, testuser');
     });
 
     it('should return to login button after successful logout', async () => {
