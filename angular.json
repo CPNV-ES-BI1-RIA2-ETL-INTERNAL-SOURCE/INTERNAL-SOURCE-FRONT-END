@@ -102,21 +102,7 @@
             "scripts": []
           }
         },
-        "e2e": {
-          "builder": "playwright-ng-schematics:playwright",
-          "options": {
-            "devServerTarget": "ria-frontend:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ria-frontend:serve:production"
-            }
-          }
-        }
       }
     }
-  },
-  "cli": {
-    "analytics": "8e09b44b-5bd2-4150-8e74-6b6084e6762d"
   }
 }

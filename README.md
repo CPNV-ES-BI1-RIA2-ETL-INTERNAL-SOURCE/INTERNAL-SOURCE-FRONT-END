@@ -97,16 +97,6 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Running end-to-end tests - https://angular.dev/tools/cli/end-to-end
-
-Playwright was chosen as the end-to-end testing framework especially for its ability to emulate mobile devices.
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
 ## Running unit tests - https://angular.dev/tools/cli/test
 
 For unit tests, run:
