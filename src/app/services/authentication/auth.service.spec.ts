@@ -5,7 +5,7 @@ import {
   LoginException,
   LogoutException,
   ProfileException,
-} from '../../exceptions/authentication/auth-exceptions';
+} from '../../exceptions/authentication/auth.exceptions';
 import { AuthProvider } from '../../interfaces/auth-provider.interface';
 import {
   createMockAuthProvider,
