@@ -1,6 +1,24 @@
 import { AuthProvider } from '../../interfaces/auth-provider.interface';
 import { User } from '../../models/user.model';
 import Keycloak from 'keycloak-js';
+import {AuthService} from '../../services/authentication/auth.service';
+
+/** Creates a mock AuthService with Jasmine spies for all required methods */
+export function createMockAuthService(): jasmine.SpyObj<AuthService> {
+  const mockProvider = jasmine.createSpyObj<AuthService>('AuthService', [
+    'login',
+    'logout',
+    'getUser',
+    'isAuthenticated',
+  ]);
+
+  mockProvider.isAuthenticated.and.resolveTo(false);
+  mockProvider.getUser.and.resolveTo(null);
+  mockProvider.login.and.resolveTo();
+  mockProvider.logout.and.resolveTo();
+
+  return mockProvider;
+}
 
 /** Creates a mock AuthProvider with Jasmine spies for all required methods */
 export function createMockAuthProvider(): jasmine.SpyObj<AuthProvider> {
