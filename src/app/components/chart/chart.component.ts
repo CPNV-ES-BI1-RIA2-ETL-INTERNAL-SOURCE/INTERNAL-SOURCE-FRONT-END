@@ -7,6 +7,10 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.css'
 })
+
+/**
+ * @summary The chart component to diplay a chart in an iframe.
+ */
 export class ChartComponent {
   @Input() set url(value: string) {
     this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(value);

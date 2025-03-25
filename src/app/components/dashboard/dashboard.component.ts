@@ -14,6 +14,10 @@ import {AuthService} from '../../services/authentication/auth.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
+
+/**
+ * @summary The dashboard component to diplay a charts in a dashboard.
+ */
 export class DashboardComponent implements OnInit {
   urls: string[] = [];
   isAuthenticated: boolean = false;
@@ -24,6 +28,10 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService
   ) {}
 
+  /**
+   * @summary ngOnInit  is called once, after the component constructor has been executed.
+   * @returns {Promise<void>}
+   */
   async ngOnInit() {
     this.isLoggedIn = await this.authService.isAuthenticated();
     console.log(this.isLoggedIn)
