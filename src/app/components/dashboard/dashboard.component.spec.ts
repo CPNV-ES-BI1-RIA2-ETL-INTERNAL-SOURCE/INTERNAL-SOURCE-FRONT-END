@@ -16,8 +16,8 @@ describe('DashboardComponent', () => {
   let router: jasmine.SpyObj<Router>;
 
   const mockUrls = [
-    '/assets/mocks/charts/chart1.html',
-    '/assets/mocks/charts/chart1.html'
+    'src/app/mocks/charts/chart.html',
+    'src/app/mocks/charts/chart.html'
   ];
 
   beforeEach(async () => {
