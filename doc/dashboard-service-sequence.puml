@@ -1,0 +1,31 @@
+@startuml dashboard-service-sequence
+
+skinparam sequenceArrowColor DarkSlateGray
+skinparam sequenceGroupBackgroundColor LightCyan
+skinparam sequenceLifeLineBorderColor DarkSlateGray
+skinparam sequenceParticipantBackgroundColor Wheat
+skinparam sequenceParticipantBorderColor DarkSlateGray
+
+participant "Dashboard Component" as DC
+participant "Dashboard Service" as DS
+participant "Lambda API" as LA
+
+DC -> DS: Get Dashboard URLs
+activate DS
+
+DS -> LA: Request Dashboard URLs
+activate LA
+
+alt Success
+    LA --> DS: Return Dashboard URLs
+    deactivate LA
+    DS --> DC: Return Dashboard URLs
+    deactivate DS
+else Error
+    LA --> DS: Failed to get URLs
+    deactivate LA
+    DS --> DC: Throw Exception
+    deactivate DS
+end
+
+@enduml 
