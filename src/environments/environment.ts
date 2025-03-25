@@ -7,4 +7,8 @@ export const environment = {
       clientId: 'valid-client-id',
     },
   },
+  api: {
+    lambdaUrl: 'YOUR_LAMBDA_URL_HERE',
+    identityType: 'ANONYMOUS',
+  },
 };

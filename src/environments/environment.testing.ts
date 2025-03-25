@@ -7,4 +7,8 @@ export const environment = {
       clientId: 'valid-client-id',
     },
   },
+  api: {
+    lambdaUrl: 'http://valid-lambda-url',
+    identityType: 'valid-identity-type',
+  },
 };

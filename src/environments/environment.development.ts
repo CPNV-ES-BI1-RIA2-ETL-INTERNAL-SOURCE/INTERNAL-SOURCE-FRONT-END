@@ -7,4 +7,8 @@ export const environment = {
       clientId: 'angular-client',
     },
   },
+  api: {
+    lambdaUrl: 'http://localhost:3000/dev/dashboard',
+    identityType: 'ANONYMOUS',
+  },
 };
