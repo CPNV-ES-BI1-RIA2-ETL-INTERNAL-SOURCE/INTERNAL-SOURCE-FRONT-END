@@ -21,7 +21,6 @@ import {Dashboard} from '../../interfaces/dashboard.interface';
  */
 export class DashboardComponent implements OnInit {
   urls: string[] | null = null;
-  isAuthenticated: boolean = false;
   isLoggedIn = false;
 
   constructor(
@@ -35,8 +34,7 @@ export class DashboardComponent implements OnInit {
    */
   async ngOnInit() {
     this.isLoggedIn = await this.authService.isAuthenticated();
-    console.log(this.isLoggedIn)
-    if (this.isAuthenticated) {
+    if (this.isLoggedIn) {
       this.dashboardService.getDashboard().subscribe(dashboard => {
         this.urls = dashboard.urls;
       });

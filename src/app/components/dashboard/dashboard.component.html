@@ -1,9 +1,9 @@
 <div class="sm:mx-3 md:mx-3 lg:mx-3 xl:mx-10">
   <h1 class="xl:text-5xl text-3xl pb-6">All charts</h1>
-  <div *ngIf="!isAuthenticated" class="text-center py-8">
+  <div *ngIf="!isLoggedIn" class="text-center py-8">
     <p id="should-connect" class="text-xl ">Please login to enable this feature</p>
   </div>
-  <div *ngIf="isAuthenticated">
+  <div *ngIf="isLoggedIn">
     <div *ngIf="!urls" class="text-center py-8">
       <p id="no-charts-message" class="text-xl text-gray-600">No chart available</p>
     </div>
