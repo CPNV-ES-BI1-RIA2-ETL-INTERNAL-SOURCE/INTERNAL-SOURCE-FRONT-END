@@ -5,7 +5,7 @@ import {
   LoginException,
   LogoutException,
   ProfileException,
-} from '../../../exceptions/authentication/auth-exceptions';
+} from '../../../exceptions/authentication/auth.exceptions';
 import { User } from '../../../models/user.model';
 import { createMockKeycloak } from '../../../mocks/authentication/auth-mocks';
 
