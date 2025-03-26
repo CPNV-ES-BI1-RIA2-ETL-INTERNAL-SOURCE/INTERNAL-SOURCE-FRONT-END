@@ -8,7 +8,7 @@ import {
   LoginException,
   LogoutException,
   ProfileException,
-} from '../../../exceptions/authentication/auth-exceptions';
+} from '../../../exceptions/authentication/auth.exceptions';
 
 /**
  * Keycloak implementation of the AuthProvider interface.
