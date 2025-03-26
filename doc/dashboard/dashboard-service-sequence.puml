@@ -9,7 +9,7 @@ skinparam sequenceParticipantBorderColor DarkSlateGray
 participant "Dashboard Component" as DC
 participant "Dashboard Service" as DS
 participant "Cache Service" as CS
-participant "Lambda API" as LA
+entity "Lambda API" as LA
 
 DC -> DS: Get Dashboard URLs
 activate DS
