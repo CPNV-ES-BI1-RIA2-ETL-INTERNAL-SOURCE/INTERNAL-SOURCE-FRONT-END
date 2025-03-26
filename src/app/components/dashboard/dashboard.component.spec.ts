@@ -2,36 +2,38 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { ChartComponent } from '../chart/chart.component';
 import { NgForOf, NgIf } from '@angular/common';
-import { ChartService } from '../../services/chart/chart.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import {AuthService} from '../../services/authentication/auth.service';
+import {DashboardService} from '../../services/dashboard/dashboard.service';
+import {Dashboard} from '../../interfaces/dashboard.interface';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-  let chartService: jasmine.SpyObj<ChartService>;
+  let chartService: jasmine.SpyObj<DashboardService>;
   let authService: jasmine.SpyObj<AuthService>;
   let router: jasmine.SpyObj<Router>;
 
-  const mockUrls = [
-    'src/app/mocks/charts/chart.html',
-    'src/app/mocks/charts/chart.html'
-  ];
-
+  const mockUrls :Dashboard = {
+    urls: [
+      'src/app/mocks/charts/chart.html',
+      'src/app/mocks/charts/chart.html'
+    ]
+  };
   beforeEach(async () => {
-    const chartServiceSpy = jasmine.createSpyObj('ChartService', ['getChartsUrls']);
+    const chartServiceSpy = jasmine.createSpyObj('DashboardService', ['getDashboard']);
     const authSpy = jasmine.createSpyObj('AuthService', ['isAuthenticated']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
-    chartServiceSpy.getChartsUrls.and.returnValue(of(mockUrls));
+    chartServiceSpy.getDashboard.and.returnValue(of(mockUrls));
     authSpy.isAuthenticated.and.resolveTo(false);
 
     await TestBed.configureTestingModule({
       imports: [DashboardComponent, ChartComponent, NgForOf, NgIf],
       providers: [
-        { provide: ChartService, useValue: chartServiceSpy },
+        { provide: DashboardService, useValue: chartServiceSpy },
         { provide: AuthService, useValue: authSpy },
         { provide: Router, useValue: routerSpy }
       ]
@@ -39,7 +41,7 @@ describe('DashboardComponent', () => {
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    chartService = TestBed.inject(ChartService) as jasmine.SpyObj<ChartService>;
+    chartService = TestBed.inject(DashboardService) as jasmine.SpyObj<DashboardService>;
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
   });
@@ -62,17 +64,20 @@ describe('DashboardComponent', () => {
     await component.ngOnInit();
     fixture.detectChanges();
 
-    expect(chartService.getChartsUrls).not.toHaveBeenCalled();
+    expect(chartService.getDashboard).not.toHaveBeenCalled();
   });
 
   it('should display "No chart available" message when urls array is empty', async () => {
+    const dashboard: Dashboard = {
+      urls: []
+    };
     authService.isAuthenticated.and.resolveTo(true);
-    chartService.getChartsUrls.and.returnValue(of([]));
-    
+    chartService.getDashboard.and.returnValue(of(dashboard));
+
     await component.ngOnInit();
-    
+
     component.isAuthenticated = true;
-    
+
     fixture.detectChanges();
 
     const messageElement = fixture.debugElement.query(By.css('#no-charts-message'));
@@ -81,12 +86,12 @@ describe('DashboardComponent', () => {
 
   it('should display charts when user is authenticated and urls array is not empty', async () => {
     authService.isAuthenticated.and.resolveTo(true);
-    
+
     await component.ngOnInit();
-    
+
     component.isAuthenticated = true;
-    component.urls = [...mockUrls];
-    
+    component.urls = [...mockUrls.urls];
+
     fixture.detectChanges();
 
     const chartElements = fixture.debugElement.queryAll(By.css('app-chart'));

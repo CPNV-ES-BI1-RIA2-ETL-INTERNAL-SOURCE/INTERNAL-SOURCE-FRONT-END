@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartComponent } from '../chart/chart.component';
 import {NgForOf, NgIf} from '@angular/common';
-import { ChartService } from '../../services/chart/chart.service';
 import {AuthService} from '../../services/authentication/auth.service';
+import {DashboardService} from '../../services/dashboard/dashboard.service';
+import {Dashboard} from '../../interfaces/dashboard.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,12 +20,12 @@ import {AuthService} from '../../services/authentication/auth.service';
  * @summary The dashboard component to diplay a charts in a dashboard.
  */
 export class DashboardComponent implements OnInit {
-  urls: string[] = [];
+  urls: string[] | null = null;
   isAuthenticated: boolean = false;
   isLoggedIn = false;
 
   constructor(
-    private dashboardService: ChartService,
+    private dashboardService: DashboardService,
     private authService: AuthService
   ) {}
 
@@ -36,8 +37,8 @@ export class DashboardComponent implements OnInit {
     this.isLoggedIn = await this.authService.isAuthenticated();
     console.log(this.isLoggedIn)
     if (this.isAuthenticated) {
-      this.dashboardService.getChartsUrls().subscribe(urls => {
-        this.urls = urls;
+      this.dashboardService.getDashboard().subscribe(dashboard => {
+        this.urls = dashboard.urls;
       });
     }
   }
