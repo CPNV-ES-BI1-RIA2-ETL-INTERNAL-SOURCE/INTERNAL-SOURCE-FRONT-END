@@ -1,0 +1,35 @@
+@startuml dashboard-sequence
+
+' Color scheme
+skinparam sequenceArrowColor DarkSlateGray
+skinparam sequenceGroupBackgroundColor LightCyan
+skinparam sequenceLifeLineBorderColor DarkSlateGray
+skinparam sequenceParticipantBackgroundColor Wheat
+skinparam sequenceParticipantBorderColor DarkSlateGray
+
+actor "Authenticated user"
+participant "UI Frontend" as UI
+participant "Frontend Angular" as Angular
+participant "Lambda" as Lambda
+participant "IAM" as IAM
+participant "Quicksight" as Quicksight
+
+== Dashboard Access Sequence ==
+
+"Authenticated user" -> UI: Access dashboard page
+UI -> Angular: Request dashboard
+
+Angular -> Lambda: getUrls()
+Lambda -> IAM: getRoles()
+IAM --> Lambda: Return roles
+
+Lambda -> Quicksight: Request dashboard URLs
+Quicksight --> Lambda: Return urls[]
+
+Lambda --> Angular: Return urls[]
+Angular --> UI: Display dashboards
+
+note right of Lambda: Lambda function handles\nrole-based access control
+note right of UI: "Authenticated user" can view dashboards\nbased on their roles
+
+@enduml

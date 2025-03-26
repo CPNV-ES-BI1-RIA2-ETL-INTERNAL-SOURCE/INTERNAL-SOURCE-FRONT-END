@@ -1,1 +1,16 @@
-<p>dashboard works!</p>
+<div class="sm:mx-3 md:mx-3 lg:mx-3 xl:mx-10">
+  <h1 class="xl:text-5xl text-3xl pb-6">All charts</h1>
+  <div *ngIf="!isLoggedIn" class="text-center py-8">
+    <p id="should-connect" class="text-xl ">Please login to enable this feature</p>
+  </div>
+  <div *ngIf="isLoggedIn">
+    <div *ngIf="urls?.length === 0" class="text-center py-8">
+      <p id="no-charts-message" class="text-xl text-gray-600">No chart available</p>
+    </div>
+    <div *ngIf="urls?.length > 0" id="charts-grid" class="grid gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
+      <div *ngFor="let url of urls" class="">
+        <app-chart [url]="url"></app-chart>
+      </div>
+    </div>
+  </div>
+</div>

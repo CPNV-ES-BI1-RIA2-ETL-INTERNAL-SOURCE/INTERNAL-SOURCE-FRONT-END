@@ -3,8 +3,8 @@ import { MainLayoutComponent } from './main-layout.component';
 import { AuthService } from '../../services/authentication/auth.service';
 import { createMockAuthService } from '../../mocks/authentication/auth-mocks';
 import { createTestUser } from '../../mocks/authentication/auth-mocks';
-import { LoginException, LogoutException } from '../../exceptions/authentication/auth-exceptions';
 import { By } from '@angular/platform-browser';
+import {LoginException, LogoutException} from '../../exceptions/authentication/auth.exceptions';
 
 describe('MainLayoutComponent', () => {
   let component: MainLayoutComponent;

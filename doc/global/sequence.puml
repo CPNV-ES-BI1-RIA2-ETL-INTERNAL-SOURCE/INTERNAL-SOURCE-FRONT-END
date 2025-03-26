@@ -1,0 +1,58 @@
+@startuml sequence
+
+' Color scheme
+skinparam sequenceArrowColor DarkSlateGray
+skinparam sequenceGroupBackgroundColor LightCyan
+skinparam sequenceLifeLineBorderColor DarkSlateGray
+skinparam sequenceParticipantBackgroundColor Wheat
+skinparam sequenceParticipantBorderColor DarkSlateGray
+
+actor User
+participant "UI Frontend" as UI
+participant "API Gateway" as API
+participant "Frontend Angular" as Angular
+participant "Lambda" as Lambda
+participant "IAM" as IAM
+participant "Quicksight" as Quicksight
+participant "Keycloak" as Keycloak
+database "Profiles" as Profiles
+
+== Authentication Sequence ==
+
+User -> UI: Access application
+UI -> API: HTTPS://URL/
+API -> Angular: Redirect to login
+Angular -> Keycloak: Request login
+
+alt Keycloak service unavailable
+    Keycloak --> Angular: Service error
+    Angular --> UI: Show Keycloak error message
+else Keycloak service available
+    loop Until valid credentials
+        Keycloak -> Profiles: Validate credentials
+        Profiles --> Keycloak: Invalid credentials
+    end
+    Profiles --> Keycloak: Return user data
+    Keycloak --> Angular: Return auth token
+    Angular --> API: Confirm authentication
+    API --> UI: Authentication successful
+end
+
+== Dashboard Access Sequence ==
+
+UI -> Angular: Request dashboard
+Angular -> Lambda: getUrls()
+
+Lambda -> IAM: getRoles()
+IAM --> Lambda: Return roles
+
+Lambda -> Quicksight: Request dashboard URLs
+Quicksight --> Lambda: Return urls[]
+
+Lambda --> Angular: Return urls[]
+Angular --> UI: Display dashboards
+
+note right of Lambda: Lambda function handles\nrole-based access control
+note right of Keycloak: User can retry login\nuntil successful or\nKeycloak service error
+
+@enduml

@@ -21,6 +21,7 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/app/mocks/charts/",
               {
                 "glob": "**/*",
                 "input": "public"
@@ -101,8 +102,11 @@
             ],
             "scripts": []
           }
-        },
+        }
       }
     }
+  },
+  "cli": {
+    "analytics": "53c4b54a-8756-497b-b6d2-7c2c4637c136"
   }
 }
