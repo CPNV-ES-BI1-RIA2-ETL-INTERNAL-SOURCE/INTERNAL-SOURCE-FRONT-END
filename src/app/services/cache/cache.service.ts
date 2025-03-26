@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-
-interface CacheItem<T> {
-  data: T;
-  timestamp: number;
-}
+import { CacheItem } from '../../interfaces/cache-item.interface';
 
 @Injectable({
   providedIn: 'root',
