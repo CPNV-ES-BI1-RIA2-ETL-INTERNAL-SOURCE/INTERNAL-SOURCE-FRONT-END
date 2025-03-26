@@ -20,7 +20,7 @@ import {Dashboard} from '../../interfaces/dashboard.interface';
  * @summary The dashboard component to diplay a charts in a dashboard.
  */
 export class DashboardComponent implements OnInit {
-  urls: string[] | null = null;
+  urls: string[] = [];
   isLoggedIn = false;
 
   constructor(

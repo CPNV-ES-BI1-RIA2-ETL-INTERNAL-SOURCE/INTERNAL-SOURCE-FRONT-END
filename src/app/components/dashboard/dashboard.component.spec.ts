@@ -76,7 +76,7 @@ describe('DashboardComponent', () => {
 
     await component.ngOnInit();
 
-    component.isAuthenticated = true;
+    component.isLoggedIn = true;
 
     fixture.detectChanges();
 
@@ -89,7 +89,7 @@ describe('DashboardComponent', () => {
 
     await component.ngOnInit();
 
-    component.isAuthenticated = true;
+    component.isLoggedIn = true;
     component.urls = [...mockUrls.urls];
 
     fixture.detectChanges();

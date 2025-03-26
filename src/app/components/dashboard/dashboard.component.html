@@ -4,10 +4,10 @@
     <p id="should-connect" class="text-xl ">Please login to enable this feature</p>
   </div>
   <div *ngIf="isLoggedIn">
-    <div *ngIf="!urls" class="text-center py-8">
+    <div *ngIf="urls?.length === 0" class="text-center py-8">
       <p id="no-charts-message" class="text-xl text-gray-600">No chart available</p>
     </div>
-    <div *ngIf="urls" id="charts-grid" class="grid gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
+    <div *ngIf="urls?.length > 0" id="charts-grid" class="grid gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
       <div *ngFor="let url of urls" class="">
         <app-chart [url]="url"></app-chart>
       </div>
