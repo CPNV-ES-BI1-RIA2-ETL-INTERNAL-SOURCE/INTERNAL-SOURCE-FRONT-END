@@ -1,0 +1,37 @@
+@startuml
+[UI Frontend]
+node "AWS" {
+  [API Gateway]
+  [Frontend Angular]
+   cloud {
+      [IAM]
+   }
+
+  [Lambda]
+  cloud {
+    [Quicksight]
+  }
+
+
+  package "Auth" {
+    [KeyClock]
+    database "Profiles" {
+    }
+  }
+}
+
+[UI Frontend] -->  [API Gateway] : 1. HTTPS://URL/
+[API Gateway] --> [Frontend Angular] : 2. login
+[Frontend Angular] --> [KeyClock] : 3. credentials
+[KeyClock] --> "Profiles" : 4. credentials
+"Profiles" ..> [KeyClock] : 5. credentials
+[KeyClock] ..> [Frontend Angular] : 6. credentials
+[Frontend Angular] --> [Lambda] : 7. getUrls()
+[Lambda] --> [IAM] : 8. getRoles()
+[IAM] ..> [Lambda] : 9. getUrls()
+[Lambda] --> [Quicksight] : 10. urls[]
+[Quicksight] ..> [Lambda] : 11. urls[]
+[Lambda] ..> [Frontend Angular] : 12. urls[]
+[Frontend Angular] ..> [API Gateway] : 13. urls[]
+[API Gateway] ..> [UI Frontend] : 14. urls[]
+@enduml

@@ -1,0 +1,45 @@
+@startuml dashboard-service-sequence
+
+skinparam sequenceArrowColor DarkSlateGray
+skinparam sequenceGroupBackgroundColor LightCyan
+skinparam sequenceLifeLineBorderColor DarkSlateGray
+skinparam sequenceParticipantBackgroundColor Wheat
+skinparam sequenceParticipantBorderColor DarkSlateGray
+
+participant "Dashboard Component" as DC
+participant "Dashboard Service" as DS
+participant "Cache Service" as CS
+entity "Lambda API" as LA
+
+DC -> DS: Get Dashboard URLs
+activate DS
+
+alt Cache Hit
+    DS -> CS: Get Cached Data
+    activate CS
+    CS --> DS: Return Cached Data
+    deactivate CS
+    DS --> DC: Return Cached Data
+    deactivate DS
+else Cache Miss
+    DS -> LA: Request Dashboard URLs
+    activate LA
+
+    alt Success
+        LA --> DS: Return Dashboard URLs
+        deactivate LA
+        DS -> CS: Cache Response
+        activate CS
+        CS --> DS: Cache Confirmed
+        deactivate CS
+        DS --> DC: Return Dashboard URLs
+        deactivate DS
+    else Error
+        LA --> DS: Failed to get URLs
+        deactivate LA
+        DS --> DC: Throw Exception
+        deactivate DS
+    end
+end
+
+@enduml 

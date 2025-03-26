@@ -1,0 +1,37 @@
+name: 'Prevent main from untested code'
+
+on:
+  push:
+    branches: [ "main", "develop", "release/**" ]
+
+jobs:
+  test:
+      runs-on: ubuntu-latest 
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Build and test Docker image
+        run: | 
+          docker build --target test -f Dockerfile -t internal-source-front-end:test . --no-cache
+          docker run --rm internal-source-front-end:test
+
+  # Publish artifact for production only on main  
+  publish-artifact:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build production Docker image
+      run: docker build --target runtime -t internal-source-front-end:latest .
+
+    - name: Save Docker image to tar file
+      run: docker save -o internal-source-front-end.tar internal-source-front-end:latest
+
+    - name: Upload Docker image tar file
+      uses: actions/upload-artifact@v4
+      with:
+        name: internal-source-front-end-tar
+        path: internal-source-front-end.tar
