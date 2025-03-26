@@ -3,6 +3,8 @@ name: 'Prevent main from untested code'
 on:
   push:
     branches: [ "main", "develop", "release/**" ]
+  pull_request:
+    branches: [ "*" ]
 
 jobs:
   test:
